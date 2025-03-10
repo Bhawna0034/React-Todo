@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
 import TodoDate from "./TodoDate";
+import { getLocalStorageTodoData, setLocalStorageTodoData } from "./TodoLocalStorage";
+
 
 export const Todo = () => {
   // for storing tasks
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => getLocalStorageTodoData());
 
   function handleFormSubmit(inputValue) {
     const {id, content, checked} = inputValue;
@@ -42,6 +44,12 @@ export const Todo = () => {
     })
     setTasks(updatedTasks);
   }
+
+  // added data to the local storage
+  useEffect(() => {
+    setLocalStorageTodoData(tasks);
+  }, [tasks]);
+  
 
   return (
     <div className="bg-[#081c29] flex items-center justify-center min-h-screen">
