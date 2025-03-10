@@ -7,6 +7,7 @@ const TodoList = ({
   checked,
   onHandleDeleteTask,
   onHandleCheckedTask,
+  onHandleEditTask
 }) => {
   return (
     <div>
@@ -17,7 +18,7 @@ const TodoList = ({
             onClick={() => onHandleCheckedTask(data)}
             className="text-green-600"
           />
-          <FaEdit />
+          <FaEdit onClick={() => onHandleEditTask(data)} />
           <MdDelete
             onClick={() => onHandleDeleteTask(data)}
             className="text-red-600"
