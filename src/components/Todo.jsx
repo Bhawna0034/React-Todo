@@ -6,26 +6,41 @@ import TodoDate from "./TodoDate";
 export const Todo = () => {
   // for storing tasks
   const [tasks, setTasks] = useState([]);
+
   function handleFormSubmit(inputValue) {
+    const {id, content, checked} = inputValue;
+
     // check if the input field is empty or not
-    if (!inputValue) return;
+    if (!content) return;
 
-    // check if the task is exist or not
-    if (tasks.includes(inputValue)) return;
+    // check if the data is already exists or not
+    const ifTodoContentMatched = tasks.find((currentTask) => currentTask.content === content);
+    if(ifTodoContentMatched) return;
 
-    setTasks((prevTasks) => [...prevTasks, inputValue]);
+    setTasks((prevTasks) => [...prevTasks, {id, content, checked}]);
   }
 
+  // handle ClearAll functionality
   function handleClearAllTodo() {
     setTasks([]);
   }
 
+  // handle DeletedTask functionality
   function handleDeleteTask(value) {
     console.log(value);
-    const updatedTask = tasks.filter((currentTask) => {
-      currentTask !== value;
-    });
+    const updatedTask = tasks.filter((currentTask) => currentTask.content !== value);
     setTasks(updatedTask);
+  }
+
+  // handle CheckedTask functionality
+  function handleCheckedTask(content){
+    const updatedTasks = tasks.map((currentTask) => {
+     if(currentTask.content === content)
+       return {...currentTask, checked: !currentTask.checked};
+     else
+       return currentTask;
+    })
+    setTasks(updatedTasks);
   }
 
   return (
@@ -38,12 +53,14 @@ export const Todo = () => {
         {/* TodoList */}
         <section>
           <ul className="space-y-4 mb-8">
-            {tasks.map((currentTask, index) => {
+            {tasks.map((currentTask) => {
               return (
                 <TodoList
-                  key={index}
-                  data={currentTask}
+                  key={currentTask.id}
+                  data={currentTask.content}
+                  checked={currentTask.checked}
                   onHandleDeleteTask={handleDeleteTask}
+                  onHandleCheckedTask={handleCheckedTask}
                 />
               );
             })}
